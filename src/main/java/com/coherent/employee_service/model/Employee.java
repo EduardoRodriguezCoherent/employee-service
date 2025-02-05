@@ -36,7 +36,7 @@ public class Employee {
     private String name;
 
     @Column(nullable = false)
-    private String surname;
+    private String lastName;
 
     @Column(name = "birth_date")
     private LocalDate birthDate;
@@ -47,14 +47,17 @@ public class Employee {
     @Column(nullable = false)
     private long salary;
 
-    @ElementCollection(targetClass = EmployeeRole.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "employee_roles", joinColumns = @JoinColumn(name = "employee_id"))
+    @ElementCollection(targetClass = EmployeeRole.class,
+            fetch = FetchType.EAGER)
+    @CollectionTable(name = "employee_roles",
+            joinColumns = @JoinColumn(name = "employee_id"))
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private Set<EmployeeRole> roles;
 
     @ElementCollection
-    @CollectionTable(name = "trainer_areas", joinColumns = @JoinColumn(name = "employee_id"))
+    @CollectionTable(name = "trainer_areas",
+            joinColumns = @JoinColumn(name = "employee_id"))
     @Column(name = "facility_id")
     private Set<Long> expertiseAreas;
 }
