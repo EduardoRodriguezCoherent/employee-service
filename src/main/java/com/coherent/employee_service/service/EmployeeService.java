@@ -15,9 +15,11 @@ public interface EmployeeService {
 
     EmployeeDto save(RegisterEmployeeDto registerEmployee);
 
-    EmployeeDto update(EmployeeDto updateEmployee);
+    EmployeeDto update(Long id, RegisterEmployeeDto updateEmployee);
 
-    List<EmployeeRole> addOrChangeRole(EmployeeDto employeeDto);
+    Set<EmployeeRole> addRole(Long id, EmployeeRole role);
+
+    Set<EmployeeRole> deleteRole(Long id, EmployeeRole role);
 
     EmployeeDto assignExpertiseArea(Long employeeId, Set<Long> expertiseAreas);
 }

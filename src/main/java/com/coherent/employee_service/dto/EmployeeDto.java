@@ -8,7 +8,7 @@ import java.util.Set;
 public record EmployeeDto(
         Long id,
         String name,
-        String surname,
+        String lastName,
         LocalDate birthDate,
         Set<EmployeeRole> roles,
         Set<Long> expertiseAreas // Facility IDs

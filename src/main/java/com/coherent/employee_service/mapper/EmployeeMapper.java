@@ -9,11 +9,11 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface EmployeeMapper {
 
-    EmployeeDto toEmployee(Employee employee);
+    EmployeeDto toEmployeeDto(Employee employee);
 
     @Mapping(target = "bankAccount", ignore = true)
     @Mapping(target = "salary", ignore = true)
     Employee toEmployee(EmployeeDto employeeDto);
 
-    Employee toEntity(RegisterEmployeeDto registerEmployeeDto);
+    Employee toEmployee(RegisterEmployeeDto registerEmployeeDto);
 }

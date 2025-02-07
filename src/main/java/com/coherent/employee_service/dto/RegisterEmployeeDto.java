@@ -7,7 +7,7 @@ import java.util.Set;
 
 public record RegisterEmployeeDto(
         String name,
-        String surname,
+        String lastName,
         LocalDate birthDate,
         String bankAccount,
         long salary,
