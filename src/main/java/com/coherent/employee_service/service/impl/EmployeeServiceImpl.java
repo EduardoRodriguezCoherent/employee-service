@@ -7,6 +7,8 @@ import com.coherent.employee_service.model.Employee;
 import com.coherent.employee_service.model.EmployeeRole;
 import com.coherent.employee_service.repository.EmployeeRepository;
 import com.coherent.employee_service.service.EmployeeService;
+import com.coherent.employee_service.service.ValidateGymFacilityService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -18,10 +20,14 @@ import java.util.Set;
 public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
+    private final ValidateGymFacilityService validateGymFacilityService;
     private final EmployeeMapper employeeMapper;
 
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository, EmployeeMapper employeeMapper) {
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository,
+                               ValidateGymFacilityService validateGymFacilityService,
+                               EmployeeMapper employeeMapper) {
         this.employeeRepository = employeeRepository;
+        this.validateGymFacilityService = validateGymFacilityService;
         this.employeeMapper = employeeMapper;
     }
 
@@ -43,7 +49,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public EmployeeDto save(RegisterEmployeeDto registerEmployee) {
         Employee employee = employeeMapper.toEmployee(registerEmployee);
-        if(employee.getName() == null || employee.getName().isBlank()){
+        if (employee.getName() == null || employee.getName().isBlank()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Employee name cannot be empty");
         }
         if (employee.getId() != null && employeeRepository.existsById(employee.getId())) {
@@ -80,7 +86,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             existingEmployee.setExpertiseAreas(updateEmployee.expertiseAreas());
         }
 
-        return employeeMapper.toEmployeeDto(existingEmployee);
+        return employeeMapper.toEmployeeDto(employeeRepository.save(existingEmployee));
     }
 
     @Override
@@ -90,7 +96,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         Set<EmployeeRole> roles = employee.getRoles();
 
-        if(roles.contains(role)){
+        if (roles.contains(role)) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Employee with id: " + id + " already has [" + role + "] role");
         }
 
@@ -106,7 +112,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         Set<EmployeeRole> roles = employee.getRoles();
 
-        if(!roles.contains(role)){
+        if (!roles.contains(role)) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Employee with id: " + id + " has not [" + role + "] role");
         }
 
@@ -116,8 +122,26 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public EmployeeDto assignExpertiseArea(Long employeeId, Set<Long> expertiseAreas) {
+    public EmployeeDto assignExpertiseArea(Long clubId, Long employeeId, Long expertiseAreaId) {
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Employee not found with : " + employeeId));
 
-        return null;
+        if (!employee.getRoles().contains(EmployeeRole.TRAINER)) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Employee is not a TRAINER");
+        }
+
+        Set<Long> expertiseAreas = employee.getExpertiseAreas();
+
+        if (!validateGymFacilityService.validateExpertiseArea(clubId, expertiseAreaId)) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Expertise area with id: " + expertiseAreaId + " not valid for gym club");
+        }
+        if (expertiseAreas.contains(expertiseAreaId)) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Trainer already has Expertise area with id: " + expertiseAreaId);
+        }
+
+        expertiseAreas.add(expertiseAreaId);
+        employee.setExpertiseAreas(expertiseAreas);
+
+        return employeeMapper.toEmployeeDto(employee);
     }
 }

@@ -1,4 +1,4 @@
-INSERT INTO employee (name, last_name, birth_date, bank_account, salary) VALUES
+INSERT INTO employees (name, last_name, birth_date, bank_account, salary) VALUES
 ('Alice', 'Johnson', '1985-07-20', '987654321', 60000),
 ('Bob', 'Smith', '1990-03-15', '123456789', 55000),
 ('Charlie', 'Brown', '1982-11-25', '567890123', 70000),

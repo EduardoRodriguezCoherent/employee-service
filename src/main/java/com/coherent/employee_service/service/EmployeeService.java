@@ -21,5 +21,5 @@ public interface EmployeeService {
 
     Set<EmployeeRole> deleteRole(Long id, EmployeeRole role);
 
-    EmployeeDto assignExpertiseArea(Long employeeId, Set<Long> expertiseAreas);
+    EmployeeDto assignExpertiseArea(Long clubId, Long employeeId, Long expertiseAreas);
 }
