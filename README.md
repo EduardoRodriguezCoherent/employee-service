@@ -14,7 +14,8 @@ To run the application locally, ensure you have the following:
 - **Docker (optional)** – If you prefer running MySQL in a container.
 - **Discovery Service** – This microservice relies on a service discovery component. Ensure it is running before starting this service.
 - **Gym Club Service** – This microservice relies on a gym club service, since it is used to validate the expertise are,
-a.k.a. facility in the **gym-club-service**, the employee service call synchronously the gym club service to do so.
+a.k.a. facility in the **gym-club-service**, the employee service call synchronously the gym club service to do so. You
+can adjust this by using **RestTemplate**, **WebClient** or **FeignClient**.
 
 ## Setup Instructions
 
@@ -86,7 +87,7 @@ This will start the Employee Service, which should now be available on http://lo
   Removes roles to an employee.
 - **POST** `/api/employees/{employeeId}/assign-expertise`  
   Validates expertise area to and the assigns it to teh TRAINER, to check if the area is valid, this service calls
-the **gym-club-service** synchronously.
+the **gym-club-service** synchronously. 
 
 ### **Troubleshooting**
 1. Ensure that the Discovery Service is running before starting the Employee service.
