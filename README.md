@@ -86,8 +86,8 @@ This will start the Employee Service, which should now be available on http://lo
 - **DELETE** `/api/employees/{id}/roles`  
   Removes roles to an employee.
 - **POST** `/api/employees/{employeeId}/assign-expertise`  
-  Validates expertise area to and the assigns it to teh TRAINER, to check if the area is valid, this service calls
-the **gym-club-service** synchronously. 
+  Validates expertise area to and the assigns it to the TRAINER, to check if the area is valid, this service calls
+the **gym-club-service** synchronously.Then it assigns the area to the corresponding employee (TRAINER).
 
 ### **Troubleshooting**
 1. Ensure that the Discovery Service is running before starting the Employee service.
