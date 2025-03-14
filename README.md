@@ -40,7 +40,6 @@ Make sure the application’s database connection is correctly configured. Open 
 the following configuration:
 
 ```properties
-
 # Database Configuration (H2 for development)
 spring.datasource.url=jdbc:h2:mem:gymemployee
 spring.datasource.driver-class-name=org.h2.Driver
