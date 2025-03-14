@@ -4,7 +4,7 @@ import com.coherent.employee_service.service.ValidateGymFacilityService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
-@Service("WebClientValidateFacilityClient")
+@Service("webClientValidateFacilityClient")
 public class WebClientValidateFacilityClient implements ValidateGymFacilityService {
 
     private final WebClient webClient;

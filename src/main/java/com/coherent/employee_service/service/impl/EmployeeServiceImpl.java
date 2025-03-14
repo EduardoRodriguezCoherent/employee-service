@@ -8,7 +8,6 @@ import com.coherent.employee_service.model.EmployeeRole;
 import com.coherent.employee_service.repository.EmployeeRepository;
 import com.coherent.employee_service.service.EmployeeService;
 import com.coherent.employee_service.service.ValidateGymFacilityService;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -19,6 +18,7 @@ import java.util.Set;
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
+    private static final String EMPLOYEE_NOT_FOUND = "Employee not found with : ";
     private final EmployeeRepository employeeRepository;
     private final ValidateGymFacilityService validateGymFacilityService;
     private final EmployeeMapper employeeMapper;
@@ -62,7 +62,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public EmployeeDto update(Long id, RegisterEmployeeDto updateEmployee) {
         Employee existingEmployee = employeeRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Employee not found with : " + id));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, EMPLOYEE_NOT_FOUND + id));
 
         if (updateEmployee.name() != null && !updateEmployee.name().isEmpty()) {
             existingEmployee.setName(updateEmployee.name());
@@ -92,7 +92,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Set<EmployeeRole> addRole(Long id, EmployeeRole role) {
         Employee employee = employeeRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Employee not found with : " + id));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, EMPLOYEE_NOT_FOUND + id));
 
         Set<EmployeeRole> roles = employee.getRoles();
 
@@ -108,7 +108,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Set<EmployeeRole> deleteRole(Long id, EmployeeRole role) {
         Employee employee = employeeRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Employee not found with : " + id));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, EMPLOYEE_NOT_FOUND + id));
 
         Set<EmployeeRole> roles = employee.getRoles();
 
@@ -124,7 +124,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public EmployeeDto assignExpertiseArea(Long clubId, Long employeeId, Long expertiseAreaId) {
         Employee employee = employeeRepository.findById(employeeId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Employee not found with : " + employeeId));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, EMPLOYEE_NOT_FOUND + employeeId));
 
         if (!employee.getRoles().contains(EmployeeRole.TRAINER)) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Employee is not a TRAINER");

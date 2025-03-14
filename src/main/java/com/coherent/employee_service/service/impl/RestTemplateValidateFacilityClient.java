@@ -4,7 +4,9 @@ import com.coherent.employee_service.service.ValidateGymFacilityService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-@Service("RestTemplateValidateFacilityClient")
+import java.util.Objects;
+
+@Service("restTemplateValidateFacilityClient")
 public class RestTemplateValidateFacilityClient implements ValidateGymFacilityService {
 
     private final RestTemplate restTemplate;
@@ -18,6 +20,6 @@ public class RestTemplateValidateFacilityClient implements ValidateGymFacilitySe
         String url = String.format("%s%s?clubId=%d&facilityId=%d",
                 BASE_URI, VALIDATE_FACILITY_ENDPOINT,
                 clubId, facilityId);
-        return restTemplate.getForObject(url, Boolean.class);
+        return Objects.requireNonNull(restTemplate.getForObject(url, Boolean.class));
     }
 }
