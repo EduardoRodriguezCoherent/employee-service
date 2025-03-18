@@ -20,6 +20,6 @@ public class RestTemplateValidateFacilityClient implements ValidateGymFacilitySe
         String url = String.format("%s%s?clubId=%d&facilityId=%d",
                 BASE_URI, VALIDATE_FACILITY_ENDPOINT,
                 clubId, facilityId);
-        return Objects.requireNonNull(restTemplate.getForObject(url, Boolean.class));
+        return Objects.requireNonNull(restTemplate.getForObject(url, Boolean.class), "Call to Gym Club Service has failed.");
     }
 }
